@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchFromGitHub
 , autoreconfHook
 , docbook_xml_dtd_45
 , docbook-xsl-nons
@@ -54,14 +55,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.15.4";
+  version = "1.15.8";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
-  src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-vvaV2JPR4COaaEQdazKO3rbR5YqQLJL5J46U2pFKuR8="; # Taken from https://github.com/flatpak/flatpak/releases/
+  src = fetchFromGitHub {
+    owner = "flatpak";
+    repo = "flatpak";
+    rev = finalAttrs.version;
+    fetchSubmodules = true; 
+    hash = "";
   };
 
   patches = [
